@@ -15,11 +15,9 @@
 			<ModelOffset x="0" y="0" z="0"/>
 			<Model>Models\Highfleet\HFSE_LargeHullSlope.mwm</Model>
 			<Components>
-				<Component Subtype="SteelPlate" Count="800"/>
-				<Component Subtype="MetalGrid" Count="300"/>	
-				<Component Subtype="SteelPlate" Count="200"/>				
+				<Component Subtype="SteelPlate" Count="500"/>			
 			</Components>
-			<CriticalComponent Subtype="MetalGrid" Index="0"/>
+			<CriticalComponent Subtype="SteelPlate" Index="0"/>
 			<MountPoints>
 				<MountPoint Side="Front" StartX="0.00" StartY="0.00" EndX="3.00" EndY="3.00"/>
 				<MountPoint Side="Back" StartX="0.00" StartY="0.00" EndX="3.00" EndY="0.30"/>
