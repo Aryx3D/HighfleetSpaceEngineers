@@ -31,7 +31,7 @@ using static Scripts.Structure.WeaponDefinition.AmmoDef.GraphicDef.LineDef.Trace
 using static Scripts.Structure.WeaponDefinition.AmmoDef.GraphicDef.LineDef.Texture;
 using static Scripts.Structure.WeaponDefinition.AmmoDef.GraphicDef.DecalDef;
 using static Scripts.Structure.WeaponDefinition.AmmoDef.DamageScaleDef.DamageTypes.Damage;
-
+using static Scripts.Structure.WeaponDefinition.AmmoDef.GraphicDef.LineDef.FactionColor;
 namespace Scripts
 { // Don't edit above this line
     partial class Parts
@@ -99,7 +99,6 @@ namespace Scripts
             {
                 Patterns = new[] { // If enabled, set of multiple ammos to fire in order instead of the main ammo.
                     "LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo",
-                    "LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo","LA29 AC Ammo",
                     "LA29 K-13 Missile Ammo","LA29 K-13 Missile Ammo",
                 },
                 Mode = Fragment, // Select when to activate this pattern, options: Never, Weapon, Fragment, Both 
@@ -115,7 +114,7 @@ namespace Scripts
                 MaxIntegrity = 0f, // Blocks with integrity higher than this value will be immune to damage from this projectile; 0 = disabled.
                 DamageVoxels = false, // Whether to damage voxels.
                 SelfDamage = false, // Whether to damage the weapon's own grid.
-                HealthHitModifier = 0.5, // How much Health to subtract from another projectile on hit; defaults to 1 if zero or less.
+                HealthHitModifier = 10, // How much Health to subtract from another projectile on hit; defaults to 1 if zero or less.
                 VoxelHitModifier = 1, // Voxel damage multiplier; defaults to 1 if zero or less.
                 Characters = -1f, // Character damage multiplier; defaults to 1 if zero or less.
                 // For the following modifier values: -1 = disabled (higher performance), 0 = no damage, 0.01f = 1% damage, 2 = 200% damage.
@@ -285,7 +284,7 @@ namespace Scripts
                 Smarts = new SmartsDef
                 {
                     SteeringLimit = 150, // 0 means no limit, value is in degrees, good starting is 150.  This enable advanced smart "control", cost of 3 on a scale of 1-5, 0 being basic smart.
-                    Inaccuracy = 0f, // 0 is perfect, hit accuracy will be a random num of meters between 0 and this value.
+                    Inaccuracy = 100, // 0 is perfect, hit accuracy will be a random num of meters between 0 and this value.
                     Aggressiveness = 9, // controls how responsive tracking is.
                     MaxLateralThrust = 1, // controls how sharp the projectile may turn, this is the cheaper but less realistic version of SteeringLimit, cost of 2 on a scale of 1-5, 0 being basic smart.
                     NavAcceleration = 0.015, // helps influence how the projectile steers. 
@@ -299,7 +298,7 @@ namespace Scripts
                     NoTargetExpire = false, // Expire without ever having a target at TargetLossTime
                     Roam = true, // Roam current area after target loss
                     KeepAliveAfterTargetLoss = true, // Whether to stop early death of projectile on target loss
-                    OffsetRatio = 0.1f, // The ratio to offset the random direction (0 to 1) 
+                    OffsetRatio = 0.25f, // The ratio to offset the random direction (0 to 1) 
                     OffsetTime = 60, // how often to offset degree, measured in game ticks (6 = 100ms, 60 = 1 seconds, etc..)
                     OffsetMinRange = 0, // The range from target at which offsets are no longer active
 
@@ -317,6 +316,7 @@ namespace Scripts
                 //ORBIT THE TARGET
                 Approaches = new[] // These approaches move forward and backward in order, once the end condition of the last one is reached it will revert to default behavior. Cost level of 4+, or 5+ if used with steering.
                 {
+
 
                     //orbit
                     new ApproachDef
@@ -345,7 +345,7 @@ namespace Scripts
                         
                         // Special triggers when the start/end conditions are met (DoNothing, EndProjectile, EndProjectileOnRestart, StoreDestination)
                         StartEvent = DoNothing,
-                        EndEvent = DoNothing,  
+                        EndEvent = StoreDestination,  
                         
                         // Relative positions and directions
                         Up = TargetVelocity, // RelativeToBlock, RelativeToGravity, TargetDirection, TargetVelocity, RelativeToStoredDestination
@@ -411,6 +411,100 @@ namespace Scripts
                         AlternateModel = "", // Define only if you want to switch to an alternate model in this phase
                         AlternateSound = "" // if blank it will use default, must be a default version for this to be useable. 
                     },
+
+                    //run & gun
+                    new ApproachDef
+                    {
+                        // Start/End behaviors 
+                        RestartCondition = Wait, // Wait, MoveToPrevious, MoveToNext, ForceRestart -- A restart condition is when the end condition is reached without having met the start condition. 
+                        OnRestartRevertTo = 0, // This applies if RestartCondition is set to ForceRestart and trigger requirement was met. -1 to reset to BEFORE the for approach stage was activated.  First stage is 0, second is 1, etc...
+                        Operators = StartEnd_Or, // Controls how the start and end conditions are matched:  StartEnd_And, StartEnd_Or, StartAnd_EndOr,StartOr_EndAnd,
+                        CanExpireOnceStarted = true, // This stages values will continue to apply until the end conditions are met.
+                        ForceRestart = true, // This forces the ReStartCondition when the end condition is met no matter if the start condition was met or not.
+
+                        // Start/End conditions
+                        StartCondition1 = DistanceToTarget, // Each condition type is either >= or <= the corresponding value defined below.
+                                                    // DistanceFromTarget[<=], DistanceToTarget[>=], Lifetime[>=], DeadTime[<=], MinTravelRequired[>=], MaxTravelRequired[<=],
+                                                    // Ignore(skip this condition), Spawn(works per stage), DesiredElevation(tolerance can be set with ElevationTolerance)
+                                                    // *NOTE* DO NOT set start1 and start2 or end1 and end2 to same condition
+                        StartCondition2 = Ignore,
+                        EndCondition1 = Lifetime,
+                        EndCondition2 = Ignore, 
+
+                        // Start/End thresholds -- both conditions are evaluated before activation, use Ignore to skip
+                        Start1Value = 800,
+                        Start2Value = 0,
+                        End1Value = 300,
+                        End2Value = 0, 
+                        
+                        // Special triggers when the start/end conditions are met (DoNothing, EndProjectile, EndProjectileOnRestart, StoreDestination)
+                        StartEvent = DoNothing,
+                        EndEvent = StoreDestination,  
+                        
+                        // Relative positions and directions
+                        Up = TargetVelocity, // RelativeToBlock, RelativeToGravity, TargetDirection, TargetVelocity, RelativeToStoredDestination
+                        
+                        Source = Current, // Origin, Shooter, Target, Surface, MidPoint, Current, Nothing, StoredDestination,
+                        Destination = Target,
+                        Elevation = Nothing, 
+                        
+                        //
+                        // Control if the vantage points update only at approach start or every frame that the approach is active.
+                        //
+                        AdjustUp = true, // adjust upDir relative to set condition overtime
+                        AdjustSource = true, // Updated the approach vantage point as it moves/changes.
+                        AdjustDestination = true, // End conditions relative to the target position will shift as the target moves
+                        
+                        // Tweaks to vantage point behavior
+                        AngleOffset = 0.1, // value 0 - 1, rotates the Updir
+                        ElevationTolerance = 0, // adds additional tolerance (in meters) to meet the Elevation condition requirement.  *note* collision size is also added to the tolerance
+                        TrackingDistance = 10, // Minimum travel distance before projectile begins racing to target
+                        DesiredElevation = 10, // The desired elevation relative to source 
+
+                        // Controls the leading behavior
+                        LeadDistance = 1, // Add additional "lead" in meters to the trajectory (project in the future), this will be applied even before TrackingDistance is met. 
+                        PushLeadByTravelDistance = false, // the follow lead position will move in its point direction by an amount equal to the projectiles travel distance.
+
+                        // Modify speed and acceleration ratios while this approach is active
+                        AccelMulti = 1.0, // Modify default acceleration by this factor
+                        DeAccelMulti = 0, // Modifies your default deacceleration by this factor
+                        TotalAccelMulti = 0, // Modifies your default totalacceleration by this factor
+                        SpeedCapMulti = 1.0, // Limit max speed to this factor, must keep this value BELOW default maxspeed (1).
+
+                        // Target navigation behavior 
+                        Orbit = false, // Orbit the target
+                        OrbitRadius = 1000, // The orbit radius to extend between the projectile and the target (target volume + this value)
+                        OffsetMinRadius = 500, // Min Radius to offset from target.  
+                        OffsetMaxRadius = 1500, // Max Radius to offset from target.  
+                        OffsetTime = 120, // How often to change the offset direction.
+                        
+                        // Other
+                        NoTimedSpawns = false, // When true timedSpawns will not be triggered while this approach is active.
+                        
+                        // Audio/Visual Section
+                        AlternateParticle = new ParticleDef // if blank it will use default, must be a default version for this to be useable. 
+                        {
+                            Name = "",
+                            Offset = Vector(x: 0, y: 0, z: 0),
+                            DisableCameraCulling = true,// If not true will not cull when not in view of camera, be careful with this and only use if you know you need it
+                            Extras = new ParticleOptionDef
+                            {
+                                Scale = 1,
+                            },
+                        },
+                        StartParticle = new ParticleDef // Optional particle to play when this stage begins
+                        {
+                            Name = "",
+                            Offset = Vector(x: 0, y: 0, z: 0),
+                            DisableCameraCulling = true,// If not true will not cull when not in view of camera, be careful with this and only use if you know you need it
+                            Extras = new ParticleOptionDef
+                            {
+                                Scale = 1,
+                            },
+                        },
+                        AlternateModel = "", // Define only if you want to switch to an alternate model in this phase
+                        AlternateSound = "" // if blank it will use default, must be a default version for this to be useable. 
+                    },                   
                 },
                 Mines = new MinesDef
                 {
@@ -467,9 +561,10 @@ namespace Scripts
                     Tracer = new TracerBaseDef
                     {
                         Enable = true,
-                        Length = 1f, //
+                        Length = 10f, //
                         Width = 1f, //
-                        Color = Color(red: 35, green: 15, blue: 8, alpha: 0), // RBG 255 is Neon Glowing, 100 is Quite Bright.
+                        Color = Color(red: 25, green: 25, blue: 25, alpha: 1), // RBG 255 is Neon Glowing, 100 is Quite Bright.
+                        FactionColor = Background, // DontUse, Foreground, Background.
                         VisualFadeStart = 0, // Number of ticks the weapon has been firing before projectiles begin to fade their color
                         VisualFadeEnd = 0, // How many ticks after fade began before it will be invisible.
                         Textures = new[] {// WeaponLaser, ProjectileTrailLine, WarpBubble, etc..
@@ -497,10 +592,11 @@ namespace Scripts
                     {
                         Enable = false,
                         Textures = new[] {
-                            "ProjectileTrailLine", // Please always have this Line set, if this Section is enabled.
+                            "WeaponLaser", // Please always have this Line set, if this Section is enabled.
                         },
                         TextureMode = Normal,
-                        DecayTime = 3, // In Ticks. 1 = 1 Additional Tracer generated per motion, 33 is 33 lines drawn per projectile. Keep this number low.
+                        FactionColor = Background, // DontUse, Foreground, Background.
+                        DecayTime = 32, // In Ticks. 1 = 1 Additional Tracer generated per motion, 33 is 33 lines drawn per projectile. Keep this number low.
                         Color = Color(red: 2f, green: 1f, blue: 35f, alpha: 1f),
                         Back = false,
                         CustomWidth = 0.75f,
@@ -938,7 +1034,7 @@ namespace Scripts
                 MaxIntegrity = 0f, // Blocks with integrity higher than this value will be immune to damage from this projectile; 0 = disabled.
                 DamageVoxels = false, // Whether to damage voxels.
                 SelfDamage = false, // Whether to damage the weapon's own grid.
-                HealthHitModifier = 5, // How much Health to subtract from another projectile on hit; defaults to 1 if zero or less.
+                HealthHitModifier = 50, // How much Health to subtract from another projectile on hit; defaults to 1 if zero or less.
                 VoxelHitModifier = 1, // Voxel damage multiplier; defaults to 1 if zero or less.
                 Characters = -1f, // Character damage multiplier; defaults to 1 if zero or less.
                 // For the following modifier values: -1 = disabled (higher performance), 0 = no damage, 0.01f = 1% damage, 2 = 200% damage.
@@ -1134,7 +1230,7 @@ namespace Scripts
             },
             AmmoGraphics = new GraphicDef
             {
-                ModelName = "\\Models\\Weapons\\Projectile_Missile", // Model Path goes here.
+                ModelName = "\\Models\\AWE_Ammo\\AryxFlechetteMissile", // Model Path goes here.
                 VisualProbability = 1f, // %
                 ShieldHitDraw = true,
                 Particles = new AmmoParticleDef
