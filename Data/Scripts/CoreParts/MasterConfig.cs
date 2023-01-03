@@ -11,7 +11,7 @@ namespace Scripts
             // PartDefinitions(Your1stDefinition, Your2ndDefinition, Your3rdDefinition);
             // PartDefinitions includes both weapons and phantoms
             PartDefinitions(
-                HFSE_Generic_Turret_Weapon
+                HFSE_LA29_Weapon
             );
           
         }

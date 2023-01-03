@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<CubeBlocks>
+		<Definition xsi:type="MyObjectBuilder_ConveyorSorterDefinition">
+			<Id>
+				<TypeId>ConveyorSorter</TypeId>
+				<SubtypeId>HFSE_LA29</SubtypeId>
+			</Id>
+			<DisplayName>LA-29 Fighter-Bomber Strike Aircraft</DisplayName>
+			<Description>The LA-29 is a versatile fighter-bomber strike craft that can take on enemy aircraft and capital ships with rockets and autocannons. [2x K-13, 1x GSh AC]</Description>
+			<Icon>Textures\GUI\Icons\AstronautBackpack.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="3" y="1" z="3"/>
+			<ModelOffset x="0" y="0" z="0"/>
+			<Model>Models\Highfleet\HFSE_LA29.mwm</Model>
+			<Components>
+				<Component Subtype="SteelPlate" Count="50"/>
+				<Component Subtype="LargeTube" Count="10"/>
+				<Component Subtype="SmallTube" Count="25"/>
+				<Component Subtype="Thrust" Count="25"/>						
+				<Component Subtype="Computer" Count="50"/>	
+				<Component Subtype="InteriorPlate" Count="100"/>				
+			</Components>
+			<CriticalComponent Subtype="Computer" Index="0"/>
+			<MountPoints>
+				<MountPoint Side="Bottom" StartX="1.00" StartY="1.00" EndX="2.00" EndY="2.00"/>
+			</MountPoints>
+			<BlockPairName>HFSE_LA29</BlockPairName>
+			<MirroringX>MinusHalfY</MirroringX>
+			<MirroringY>ZHalfY</MirroringY>
+			<MirroringZ>HalfY</MirroringZ>
+			<BuildTimeSeconds>10</BuildTimeSeconds>
+			<EdgeType>Light</EdgeType>  
+			<ResourceSinkGroup>Defense</ResourceSinkGroup>
+			<InventoryMaxVolume>0.144</InventoryMaxVolume>
+			<DamageEffectName>Damage_WeapExpl_Damaged</DamageEffectName>
+			<DamagedSound>ParticleWeapExpl</DamagedSound>
+			<DestroyEffect>BlockDestroyedExplosion_Small</DestroyEffect>
+			<DestroySound>WepSmallWarheadExpl</DestroySound>
+			<PCU>100</PCU>      
+			<TargetingGroups>
+				<string>Weapons</string>
+			</TargetingGroups> 
+ 			
+		</Definition>
+	</CubeBlocks>
+</Definitions>

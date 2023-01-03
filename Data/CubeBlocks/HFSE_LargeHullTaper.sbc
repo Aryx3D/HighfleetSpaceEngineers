@@ -8,7 +8,7 @@
 			</Id>
 			<DisplayName>Large Hull Taper</DisplayName>
 			<Description>A large tapered assembly of beams for constructing a mighty vessel.</Description>
-			<Icon>Textures\GUI\Icons\Highfleet\HFSE_LargeHullSlope.dds</Icon>
+			<Icon>Textures\GUI\Icons\Highfleet\HFSE_LargeHullTaper.dds</Icon>
 			<CubeSize>Large</CubeSize>
 			<BlockTopology>TriangleMesh</BlockTopology>
 			<Size x="3" y="3" z="3"/>
