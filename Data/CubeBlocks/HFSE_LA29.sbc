@@ -8,7 +8,7 @@
 			</Id>
 			<DisplayName>LA-29 Fighter-Bomber Strike Aircraft</DisplayName>
 			<Description>The LA-29 is a versatile fighter-bomber strike craft that can take on enemy aircraft and capital ships with rockets and autocannons. [2x K-13, 1x GSh AC]</Description>
-			<Icon>Textures\GUI\Icons\AstronautBackpack.dds</Icon>
+			<Icon>Textures\GUI\Icons\Highfleet\HFSE_LA29.dds</Icon>
 			<CubeSize>Large</CubeSize>
 			<BlockTopology>TriangleMesh</BlockTopology>
 			<Size x="3" y="1" z="3"/>

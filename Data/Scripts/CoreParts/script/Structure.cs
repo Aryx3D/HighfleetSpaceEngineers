@@ -286,7 +286,9 @@ namespace Scripts
                 [ProtoMember(19)] internal CommunicationDef Communications;
                 [ProtoMember(20)] internal bool FocusOnly;
                 [ProtoMember(21)] internal bool EvictUniqueTargets;
-                
+                [ProtoMember(22)] internal int CycleTargets;
+                [ProtoMember(23)] internal int CycleBlocks;
+
                 [ProtoContract]
                 public struct CommunicationDef
                 {
@@ -815,6 +817,13 @@ namespace Scripts
                             Wave,
                         }
 
+                        public enum FactionColor
+                        {
+                            DontUse,
+                            Foreground,
+                            Background,
+                        }
+
                         [ProtoMember(1)] internal TracerBaseDef Tracer;
                         [ProtoMember(2)] internal string TracerMaterial;
                         [ProtoMember(3)] internal Randomize ColorVariance;
@@ -845,6 +854,7 @@ namespace Scripts
                             [ProtoMember(8)] internal string[] Textures;
                             [ProtoMember(9)] internal Texture TextureMode;
                             [ProtoMember(10)] internal bool AlwaysDraw;
+                            [ProtoMember(11)] internal FactionColor FactionColor;
 
                             [ProtoContract]
                             public struct SegmentDef
@@ -861,6 +871,7 @@ namespace Scripts
                                 [ProtoMember(10)] internal Randomize WidthVariance;
                                 [ProtoMember(11)] internal string[] Textures;
                                 [ProtoMember(12)] internal bool Enable;
+                                [ProtoMember(13)] internal FactionColor FactionColor;
                             }
                         }
 
@@ -878,6 +889,7 @@ namespace Scripts
                             [ProtoMember(9)] internal string[] Textures;
                             [ProtoMember(10)] internal Texture TextureMode;
                             [ProtoMember(11)] internal bool AlwaysDraw;
+                            [ProtoMember(12)] internal FactionColor FactionColor;
                         }
                     }
 
@@ -924,7 +936,8 @@ namespace Scripts
                     [ProtoMember(11)] internal TimedSpawnDef TimedSpawns;
                     [ProtoMember(12)] internal bool FireSound; // not used, can remove
                     [ProtoMember(13)] internal Vector3D AdvOffset;
-
+                    [ProtoMember(14)] internal bool ArmWhenHit;
+                        
                     [ProtoContract]
                     public struct TimedSpawnDef
                     {
@@ -1295,6 +1308,7 @@ namespace Scripts
                         [ProtoMember(20)] internal double ScanRange;
                         [ProtoMember(21)] internal bool NoSteering;
                         [ProtoMember(22)] internal double FutureIntersectionRange;
+                        [ProtoMember(23)] internal double MinTurnSpeed;
                     }
 
                     [ProtoContract]
@@ -1327,7 +1341,8 @@ namespace Scripts
                             RelativeToGravity,
                             TargetDirection,
                             TargetVelocity,
-                            RelativeToStoredDestination,
+                            StoredStartDestination,
+                            StoredEndDestination,
                         }
 
                         public enum RelativeTo
@@ -1339,7 +1354,9 @@ namespace Scripts
                             MidPoint,
                             Current,
                             Nothing,
-                            StoredDestination,
+                            StoredStartDestination,
+                            StoredEndDestination,
+
                         }
 
                         public enum ConditionOperators
@@ -1401,6 +1418,9 @@ namespace Scripts
                         [ProtoMember(40)] internal double OffsetMaxRadius;
                         [ProtoMember(41)] internal bool ForceRestart;
                         [ProtoMember(42)] internal RelativeTo Destination;
+                        [ProtoMember(43)] internal bool DisableAvoidance;
+                        [ProtoMember(44)] internal int StoredStartId;
+                        [ProtoMember(45)] internal int StoredEndId;
                     }
 
                     [ProtoContract]

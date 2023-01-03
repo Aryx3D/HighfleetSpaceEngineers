@@ -203,7 +203,8 @@ namespace Scripts {
             },
             Ammos = new[] {
                 HFSE_LA29_FighterBomber,
-                HFSE_LA29_Autocannon_Ammo
+                HFSE_LA29_Autocannon_Ammo,
+                HFSE_LA29_FighterBomber_Debris
             },
 
             Animations = LA29_LaunchAnim,
