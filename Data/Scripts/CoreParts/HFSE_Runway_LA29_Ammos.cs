@@ -83,7 +83,7 @@ namespace Scripts
                 TimedSpawns = new TimedSpawnDef // disables FragOnEnd in favor of info specified below
                 {
                     Enable = true, // Enables TimedSpawns mechanism
-                    Interval = 5, // Time between spawning fragments, in ticks
+                    Interval = 2, // Time between spawning fragments, in ticks
                     StartTime = 0, // Time delay to start spawning fragments, in ticks, of total projectile life
                     MaxSpawns = 900, // Max number of fragment children to spawn
                     Proximity = 1200, // Starting distance from target bounding sphere to start spawning fragments, 0 disables this feature.  No spawning outside this distance
@@ -365,11 +365,11 @@ namespace Scripts
                         AngleOffset = 0.1, // value 0 - 1, rotates the Updir
                         ElevationTolerance = 0, // adds additional tolerance (in meters) to meet the Elevation condition requirement.  *note* collision size is also added to the tolerance
                         TrackingDistance = 100, // Minimum travel distance before projectile begins racing to target
-                        DesiredElevation = 100, // The desired elevation relative to source 
+                        DesiredElevation = 20, // The desired elevation relative to source 
 
                         // Controls the leading behavior
-                        LeadDistance = 40, // Add additional "lead" in meters to the trajectory (project in the future), this will be applied even before TrackingDistance is met. 
-                        PushLeadByTravelDistance = false, // the follow lead position will move in its point direction by an amount equal to the projectiles travel distance.
+                        LeadDistance = 0.5f, // Add additional "lead" in meters to the trajectory (project in the future), this will be applied even before TrackingDistance is met. 
+                        PushLeadByTravelDistance = true, // the follow lead position will move in its point direction by an amount equal to the projectiles travel distance.
 
                         // Modify speed and acceleration ratios while this approach is active
                         AccelMulti = 1.0, // Modify default acceleration by this factor
