@@ -201,7 +201,7 @@ namespace Scripts
                     NoVisuals = false,
                     NoSound = false,
                     ParticleScale = 1,
-                    CustomParticle = "Explosion_LargeCaliberShell_Backup", // Particle SubtypeID, from your Particle SBC
+                    CustomParticle = "HFSE_Small_Explosion", // Particle SubtypeID, from your Particle SBC
                     CustomSound = "ArcWepExplSmall", // SubtypeID from your Audio SBC, not a filename
                     Shape = Diamond, // Round or Diamond
                 },
@@ -1512,7 +1512,7 @@ namespace Scripts
                     NoVisuals = false,
                     NoSound = false,
                     ParticleScale = 2,
-                    CustomParticle = "Explosion_LargeCaliberShell_Backup", // Particle SubtypeID, from your Particle SBC
+                    CustomParticle = "HFSE_Small_Explosion", // Particle SubtypeID, from your Particle SBC
                     CustomSound = "", // SubtypeID from your Audio SBC, not a filename
                     Shape = Diamond, // Round or Diamond
                 },
@@ -1574,9 +1574,9 @@ namespace Scripts
                 Guidance = None, // None, Remote, TravelTo, Smart, DetectTravelTo, DetectSmart, DetectFixed
                 TargetLossDegree = 0,
                 TargetLossTime = 0, // 0 is disabled, Measured in game ticks (6 = 100ms, 60 = 1 seconds, etc..).
-                MaxLifeTime = 600, // 0 is disabled, Measured in game ticks (6 = 100ms, 60 = 1 seconds, etc..).
-                AccelPerSec = 5,
-                DesiredSpeed = 100, // voxel phasing if you go above 5100
+                MaxLifeTime = 1200, // 0 is disabled, Measured in game ticks (6 = 100ms, 60 = 1 seconds, etc..).
+                AccelPerSec = 0,
+                DesiredSpeed = 200, // voxel phasing if you go above 5100
                 MaxTrajectory = 5000,
                 DeaccelTime = 0, // 0 is disabled, a value causes the projectile to come to rest overtime, (Measured in game ticks, 60 = 1 second)
                 GravityMultiplier = 4f, // Gravity multiplier, influences the trajectory of the projectile, value greater than 0 to enable.
@@ -1734,4 +1734,3 @@ namespace Scripts
 
     }
 }
-
